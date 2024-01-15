@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,21 +23,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
         @Autowired
-        private UserDetailsService jwtUserDetailsService;
-
-        @Autowired
         private JwtRequestFilter jwtRequestFilter;
 
         @Autowired
         public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-                auth.userDetailsService(jwtUserDetailsService)
+                auth.userDetailsService(JwtShared.jwtUserDetailsService)
                                 .passwordEncoder(passwordEncoder());
         }
 
         @Bean
         public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
 
-        @Bean
+        /*~~(Migrate manually based on https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)~~>*//*~~(Migrate manually based on https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)~~>*/@Bean
         @Override
         public AuthenticationManager authenticationManagerBean() throws Exception {
                 return super.authenticationManagerBean();

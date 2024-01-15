@@ -13,15 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import cc.wordview.api.service.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-
-        @Autowired
-        private JwtUserDetailsService jwtUserDetailsService;
 
         @Autowired
         private JwtTokenUtil jwtTokenUtil;
@@ -56,7 +51,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // Tendo o token, valide o.
                 if (username != null && SecurityContextHolder.getContext()
                                 .getAuthentication() == null) {
-                        UserDetails userDetails = this.jwtUserDetailsService
+                        UserDetails userDetails = JwtShared.jwtUserDetailsService
                                         .loadUserByUsername(username);
 
                         if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {

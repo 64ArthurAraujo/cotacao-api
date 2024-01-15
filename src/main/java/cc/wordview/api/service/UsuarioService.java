@@ -17,6 +17,17 @@ public class UsuarioService implements UsuarioServiceInterface {
         private UsuarioRepository repository;
 
         @Override
+        public Usuario getById(Long id) throws Exception { 
+                Optional<Usuario> usuario = repository.findById(id);
+
+                if (!usuario.isPresent()) {
+                        throw new Exception("Nenhum usuario encontrado com o id especificado.");
+                }
+
+                return usuario.get();
+        }
+
+        @Override
         public Usuario insert(Usuario entity) throws Exception { 
                 Optional<Usuario> usuarioComMesmoEmail = repository.findByEmail(entity.getEmail());
                 
@@ -37,6 +48,16 @@ public class UsuarioService implements UsuarioServiceInterface {
                 if (!usuario.isPresent()) {
                         throw new Exception("Nenhum usuario encontrado com o email especificado.");
                 } else return usuario.get();
+        }
+
+        @Override
+        public Usuario update(Usuario entity) throws Exception { 
+                return repository.save(entity);
+        }
+
+        @Override
+        public void deleteById(Long id) {
+                repository.deleteById(id);
         }
         
 }
